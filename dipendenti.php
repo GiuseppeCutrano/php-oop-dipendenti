@@ -2,27 +2,27 @@
 
 class Persona{
 
-    protected $nome;
-    protected $cognome;
-    protected $codice_fiscale;
+    public $nome;
+    public $cognome;
+    public $codice_fiscale;
 
-    public function __construct($nome, $cognome, $codice_fiscale){
+    public function __construct($nome, $cognome, $codice_fiscale)
+    {
         $this->nome = $nome;
         $this->cognome = $cognome;
         $this->codice_fiscale = $codice_fiscale;
-
-    }
-    public function to_string(){
-        
-        echo 'Nome: ' . $this->nome . '<br>';
-        echo 'Cognome: ' . $this->cognome . '<br>';
-        echo 'Codice Fiscale: ' . $this->codice_fiscale . '<br>';
         echo '<br>';
+    }
+
+    public function to_string()
+    {
+        echo "nome - " . $this->nome . "<br>" .
+            "cognome - " . $this->cognome . "<br>" .
+            "Codice Fiscale - " . $this->codice_fiscale . "<br>";
     }
 }
 
-
-    class Impiegato extends Persona{
+class Impiegato extends Persona{
 
     public $codice_impiegato;
     public $compenso;
@@ -49,50 +49,99 @@ class Persona{
     }
 }
 
-    class ImpiegatoSalariato extends Impiegato{
 
-    public $giorni_lavorati;
+class ImpiegatoSalariato extends Impiegato{
+
+    public $giorni_lavorativi;
     public $compenso_giornaliero;
 
-    public function calcola_compenso(){
-        $this->compenso = $this->giorni_lavorati * $this->compenso_giornaliero;
-        return $this->compenso;
+    public function __construct($nome, $cognome, $codice_fiscale, $codice_impiegato, $giorni_lavorativi, $compenso_giornaliero)
+    {   
+        parent::__construct($nome, $cognome, $codice_fiscale, $codice_impiegato, $giorni_lavorativi, $compenso_giornaliero);
+        $this->giorni_lavorativi = $giorni_lavorativi;
+        $this->compenso_giornaliero = $compenso_giornaliero;
     }
 
-    
+    public function calcolo_compenso()
+    {
+        return $this->giorni_lavorativi * $this->compenso_giornaliero;
+    }
 
-    function __construct($nome,$cognome,$codice_fiscale,$codice_impiegato,$giorni_lavorati,$compenso_giornaliero){
-        parent::__construct($nome,$cognome,$codice_fiscale,$codice_impiegato,0);
-        
-        $this->giorni_lavorati = $giorni_lavorati;
-        $this->compenso_giornaliero = $compenso_giornaliero;
-        $this->calcola_compenso();
+    public function to_string()
+    {
+        echo "Nome - " . $this->nome . "<br>" .
+        "Cognome - " . $this->cognome . "<br>" .
+        "Codice Fiscale - " . $this->codice_fiscale . "<br>" .
+        "Codice Impiegato - " . $this->codice_impiegato . "<br>" .
+        "Giorni Lavorativi - " . $this->giorni_lavorativi . "<br>" . 
+        "Compenso Giornaliero - " . $this->compenso_giornaliero . "€" . "<br>" .
+        "Compenso - " . $this->calcolo_compenso() . "€" . "<br>";
     }
 }
-  
 
-    class ImpiegatoAOre extends Impiegato{
+class ImpiegatoAOre extends Impiegato
+{
     public $ore_lavorate;
     public $compenso_orario;
 
-    public function calcola_compenso(){
-        $this->compenso = $this->ore_lavorate * $this->compenso_orario;
-        return $this->compenso;
-    }
-
-    
-
-    function __construct($nome,$cognome,$codice_fiscale,$codice_impiegato,$ore_lavorate,$compenso_orario){
-        parent::__construct($nome,$cognome,$codice_fiscale,$codice_impiegato,0);
-        
+    public function __construct($nome, $cognome, $codice_fiscale, $codice_impiegato, $ore_lavorate, $compenso_orario)
+    {
+        parent::__construct($nome, $cognome, $codice_fiscale, $codice_impiegato, $ore_lavorate, $compenso_orario);
         $this->ore_lavorate = $ore_lavorate;
         $this->compenso_orario = $compenso_orario;
-        $this->calcola_compenso();
+    }
+
+    public function calcolo_compenso(){
+        return $this->ore_lavorate * $this->compenso_orario;
+
+    }
+    
+        
+    
+
+    public function to_string(){
+    
+        echo "Nome - " . $this->nome . "<br>" .
+            "Cognome - " . $this->cognome . "<br>" .
+            "Codice Fiscale - " . $this->codice_fiscale . "<br>" .
+            "Codice Impiegato - " . $this->codice_impiegato . "<br>" .
+            "Ore Lavorate - " . $this->ore_lavorate . "<br>" .
+            "Compenso Orario - " . $this->compenso_orario . "€" . "<br>" .
+            "Compenso - " . $this->calcolo_compenso() . "€" . "<br>";
     }
 }
 
+class ImpiegatoSuCommissione extends Impiegato {
 
+    use Progetto;
 
+    public function __construct($nome, $cognome, $codice_fiscale, $codice_impiegato, $progetto, $commissione){
+        parent::__construct($nome,$cognome,$codice_fiscale,$codice_impiegato, $compenso=0);
+        $this->commissione = $commissione;
+        $this->progetto = $progetto;
+        $this->commissione = $commissione;
+    }
+
+    public function calcolo_compenso(){
+        return $this->commissione;
+    }
+
+    public function to_string(){
+    
+        echo "Nome - " . $this->nome . "<br>" .
+            "Cognome - " . $this->cognome . "<br>" .
+            "Codice Fiscale - " . $this->codice_fiscale . "<br>" .
+            "Codice Impiegato - " . $this->codice_impiegato . "<br>" .
+            "Nome Progetto - " . $this->progetto . "<br>" .
+            "Commissione - " . $this->calcolo_compenso() . "€" . "<br>";
+    }
+}
+
+trait Progetto{
+
+   public $nome_progetto;
+   public $commissione; 
+}
 
 
 
